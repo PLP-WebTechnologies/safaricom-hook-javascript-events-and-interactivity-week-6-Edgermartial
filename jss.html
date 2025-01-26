@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        button, input[type="submit"] {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover, input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        #myModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+        #modalContent {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+        #errorMessages {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Toggle Background Button -->
+    <button id="colorToggleBtn" onclick="toggleBackgroundColor()">Toggle Background Color</button>
+
+    <!-- Slider with Real-Time Feedback -->
+    <div>
+        <label for="textSizeSlider">Adjust Text Size: </label>
+        <input type="range" id="textSizeSlider" min="10" max="40" value="16" oninput="updateTextSize()">
+        <p id="textSample">This text changes size as you move the slider!</p>
+    </div>
+
+    <!-- Modal Button and Modal Content -->
+    <button id="openModalBtn">Open Modal</button>
+    <div id="myModal">
+        <div id="modalContent">
+            <span class="close" id="closeModalBtn">&times;</span>
+            <h2>This is a modal!</h2>
+            <p>Click the "x" to close it.</p>
+        </div>
+    </div>
+
+    <!-- Form with Validation -->
+    <h3>Sign Up Form</h3>
+    <form id="myForm" onsubmit="return validateForm()">
+        <label for="name">Name (Min 3 characters):</label>
+        <input type="text" id="name" name="name" required minlength="3">
+        <br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
+
+        <label for="password">Password (Min 8 characters, at least one uppercase letter and one number):</label>
+        <input type="password" id="password" name="password" required>
+        <br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+    <p id="errorMessages"></p>
+
+    <!-- Bonus: Dropdown Menu -->
+    <div>
+        <label for="dropdown">Choose an option:</label>
+        <select id="dropdown" onchange="showMessage()">
+            <option value="option1">mercedez</option>
+            <option value="option2">volvo</option>
+            <option value="option3">mazda</option>
+        </select>
+        <p id="dropdownMessage"></p>
+    </div>
+</div>
+
+<script>
+    // Interactive Button to Toggle Background Color
+    let isBlue = true;
+    function toggleBackgroundColor() {
+        document.body.style.backgroundColor = isBlue ? '#ADD8E9' : '#FFFAF0';
+        isBlue = !isBlue;
+    }
+
+    // Slider with Real-Time Feedback to Adjust Text Size
+    function updateTextSize() {
+        const slider = document.getElementById("textSizeSlider");
+        const textSample = document.getElementById("textSample");
+        textSample.style.fontSize = slider.value + "px";
+    }
+
+    // Modal with Event Listeners
+    const modal = document.getElementById("myModal");
+    const openModalBtn = document.getElementById("openModalBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+
+    openModalBtn.onclick = function() {
+        modal.style.display = "block";
+    };
+
+    closeModalBtn.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    // Form with Validation
+    function validateForm() {
+        let errorMessages = "";
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        // Validate name (min 3 characters)
+        if (name.length < 3) {
+            errorMessages += "Name must be at least 3 characters long.<br>";
+        }
+
+        // Validate email (valid format)
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!email.match(emailPattern)) {
+            errorMessages += "Please enter a valid email.<br>";
+        }
+
+        // Validate password (min 8 characters, one uppercase letter, one number)
+        const passwordPattern = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!password.match(passwordPattern)) {
+            errorMessages += "Password must be at least 8 characters long, with at least one uppercase letter and one number.<br>";
+        }
+
+        if (errorMessages !== "") {
+            document.getElementById("errorMessages").innerHTML = errorMessages;
+            return false; // Prevent form submission
+        }
+
+        return true; // Form is valid
+    }
+
+    // Dropdown Menu with Custom Message on Change
+    function showMessage() {
+        const selectedOption = document.getElementById("dropdown").value;
+        const message = document.getElementById("dropdownMessage");
+
+        if (selectedOption === "option1") {
+            message.textContent = "You selected Option 1.";
+        } else if (selectedOption === "option2") {
+            message.textContent = "You selected Option 2.";
+        } else if (selectedOption === "option3") {
+            message.textContent = "You selected Option 3.";
+        }
+    }
+</script>
+
+</body>
+</html>
